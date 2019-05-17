@@ -13,9 +13,8 @@ import (
 	"os"
 )
 
-
 type SongProperties []struct {
-	TrackID          string `json:"track_id"`
+	TrackID string `json:"track_id"`
 	//TrackTitle       string `json:"track_title"`
 	//TrackStreetTitle string `json:"track_street_title"`
 	//AlbumTitle       string `json:"album_title"`
@@ -24,18 +23,14 @@ type SongProperties []struct {
 	//StreamURL        string `json:"stream_url"`
 	//Genres           string `json:"genres"`
 	//SongGeneratedID  string `json:"song_generated_id"`
-	SongID           string `json:"song_id"`
+	SongID string `json:"song_id"`
 }
 
-func main()  {
+func main() {
 	getAssetinfo()
 }
 
-
-
-
 func getAssetinfo() {
-
 
 	//Check if .env file exists
 	err := godotenv.Load()
@@ -47,7 +42,7 @@ func getAssetinfo() {
 	jsonurl := os.Getenv("JSON_URL")
 
 	// Build the request
-	req, err :=  http.NewRequest("GET",jsonurl, nil)
+	req, err := http.NewRequest("GET", jsonurl, nil)
 	if err != nil {
 		log.Fatal(err, "NewRequest: ")
 		return
@@ -83,9 +78,6 @@ func getAssetinfo() {
 
 	fmt.Println(Record[0].TrackID)
 
-
-
-
 	//S3 downloader
 	AWSAuth := aws.Auth{
 		AccessKey: os.Getenv("AWS_ID"),
@@ -103,20 +95,19 @@ func getAssetinfo() {
 
 	//path := ""  // this is the target file and location in S3
 
-
 	for R := range Record {
 
 		// Download(GET)
-		fmt.Println("============================= Fetching: "+Record[R].TrackID+".mp4 ==========================")
+		fmt.Println("============================= Fetching: " + Record[R].TrackID + ".mp4 ==========================")
 
-		downloadBytes, err := bucket.Get(Record[R].TrackID+".mp4")
+		downloadBytes, err := bucket.Get(Record[R].TrackID + ".mp4")
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		downloadFile, err := os.Create(Record[R].SongID+".mp4")
+		downloadFile, err := os.Create(Record[R].SongID + ".mp4")
 
 		if err != nil {
 			fmt.Println(err)
@@ -130,7 +121,7 @@ func getAssetinfo() {
 
 		io.Copy(downloadBuffer, downloadFile)
 
-		fmt.Printf("Downloaded from S3 and saved to: "+ Record[R].SongID+".mp4 \n\n")
+		fmt.Printf("Downloaded from S3 and saved to: " + Record[R].SongID + ".mp4 \n\n")
 	}
 
 }

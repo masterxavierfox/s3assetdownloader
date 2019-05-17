@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/masterxavierfox/s3assetdownloader)](https://goreportcard.com/report/github.com/masterxavierfox/s3assetdownloader)
+
 # s3assetdownloader
 
 Simple s3 client to download assets from s3 bucket.
