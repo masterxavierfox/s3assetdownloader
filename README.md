@@ -2,7 +2,7 @@
 
 Simple s3 client to download assets from s3 bucket.
 
-###Usage
+### Usage
 
 set the below `env varibles` or use `.env` file
 
@@ -30,7 +30,7 @@ You can change this from the `main.go` file.
 
 ### Build
 
-make sure you have golang dep installed, then run:
+make sure you have [golang dep](https://github.com/golang/dep) installed, then run:
 
     dep ensure
     
