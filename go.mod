@@ -1,4 +1,4 @@
-module github.com/masterxavierfox/s3Commander
+module github.com/masterxavierfox/s3assetdownloader
 
 go 1.12
 
