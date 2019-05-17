@@ -13,7 +13,7 @@ import (
 	"os"
 )
 
-type SongProperties []struct {
+type songProperties []struct {
 	TrackID string `json:"track_id"`
 	//TrackTitle       string `json:"track_title"`
 	//TrackStreetTitle string `json:"track_street_title"`
@@ -69,7 +69,7 @@ func getAssetinfo() {
 	defer resp.Body.Close()
 
 	// Fill the record with the data from the JSON
-	var Record SongProperties
+	var Record songProperties
 
 	// Use json.Decode for reading streams of JSON data
 	if err := json.NewDecoder(resp.Body).Decode(&Record); err != nil {
