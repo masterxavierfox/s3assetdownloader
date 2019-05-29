@@ -95,23 +95,29 @@ func getAssetinfo() {
 
 	//path := ""  // this is the target file and location in S3
 
-	for R := range Record {
+
+
+	for  R := range Record {
 
 		// Download(GET)
-		fmt.Println("============================= Fetching: " + Record[R].TrackID + ".mp4 ==========================")
+		fmt.Println("  ============================= Fetching: " + Record[R].TrackID + ".mp4 ==========================")
 
 		downloadBytes, err := bucket.Get(Record[R].TrackID + ".mp4")
 
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
+			log_missing_keys(Record[R].TrackID)
+			panicAndRecover("CANT FETCH ::: #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*  404 TRACK: "+ Record[R].TrackID +" MISSING #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#* ")
+			//os.Exit(1)
+
 		}
 
 		downloadFile, err := os.Create(Record[R].SongID + ".mp4")
 
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
+			panicAndRecover("CANT WRITE ::: #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*  404 TRACK: "+ Record[R].TrackID +" MISSING #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#* ")
+			//os.Exit(1)
 		}
 
 		defer downloadFile.Close()
@@ -122,6 +128,29 @@ func getAssetinfo() {
 		io.Copy(downloadBuffer, downloadFile)
 
 		fmt.Printf("Downloaded from S3 and saved to: " + Record[R].SongID + ".mp4 \n\n")
+
 	}
 
+
+}
+
+func log_missing_keys(assetKey string){
+	f, err := os.OpenFile("missingkey.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	if _, err := f.WriteString(assetKey+"\n"); err != nil {
+		log.Println(err)
+	}
+}
+
+func panicAndRecover(message string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+	panic(message)
 }
