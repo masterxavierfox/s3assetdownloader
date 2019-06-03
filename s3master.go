@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type songProperties []struct {
@@ -21,8 +22,8 @@ type songProperties []struct {
 	//ArtistName       string `json:"artist_name"`
 	//ProviderName     string `json:"provider_name"`
 	//StreamURL        string `json:"stream_url"`
-	//Genres           string `json:"genres"`
-	//SongGeneratedID  string `json:"song_generated_id"`
+	Genres           string `json:"genres"`
+	SongGeneratedID  string `json:"song_generated_id"`
 	SongID string `json:"song_id"`
 }
 
@@ -112,7 +113,9 @@ func getAssetinfo() {
 
 		}
 
-		downloadFile, err := os.Create(Record[R].SongID + ".mp4")
+		//downloadFile, err := os.Create(Record[R].SongID + ".mp4")
+
+		downloadFile, err := os.Create(strings.ToLower(Record[R].Genres) + " " + Record[R].SongGeneratedID + ".mp4")
 
 		if err != nil {
 			fmt.Println(err)
